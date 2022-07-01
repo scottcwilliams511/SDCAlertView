@@ -36,7 +36,12 @@ public final class AlertController: UIViewController {
     @objc
     public var message: String? {
         get { return self.attributedMessage?.string }
-        set { self.attributedMessage = newValue.map(NSAttributedString.init) }
+        set {
+            self.attributedMessage = newValue.map(NSAttributedString.init)
+            if let alert = self.alert as? AlertView {
+                alert.updateHeight()
+            }
+        }
     }
 
     /// A stylized title for the alert.

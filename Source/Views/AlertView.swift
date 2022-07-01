@@ -5,6 +5,9 @@ final class AlertView: UIView, AlertControllerViewRepresentable {
     private let scrollView = UIScrollView()
     private let titleLabel = AlertLabel()
     private let  messageLabel = AlertLabel()
+    
+    private var heightConstraint: NSLayoutConstraint?
+    
     private let actionsCollectionView = ActionsCollectionView()
 
     let contentView = UIView()
@@ -89,6 +92,13 @@ final class AlertView: UIView, AlertControllerViewRepresentable {
 
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(self.highlightAction(for:)))
         self.addGestureRecognizer(panGesture)
+    }
+    
+    func updateHeight() {
+        if let heightConstraint = self.heightConstraint {
+            self.scrollView.layoutIfNeeded()
+            heightConstraint.constant = self.scrollView.contentSize.height
+        }
     }
 
     // MARK: - Private methods
@@ -246,6 +256,7 @@ final class AlertView: UIView, AlertControllerViewRepresentable {
         let heightConstraint = self.scrollView.heightAnchor.constraint(equalToConstant: height)
         heightConstraint.priority = .defaultHigh
         heightConstraint.isActive = true
+        self.heightConstraint = heightConstraint;
     }
 
     private func pinBottomOfScrollView(to view: UIView, withPriority priority: UILayoutPriority) {
